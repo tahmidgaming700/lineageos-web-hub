@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="m3-teal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#006874" />
+      <stop offset="100%" stop-color="#004F58" />
+    </linearGradient>
+    <linearGradient id="node-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9EEFFD" />
+      <stop offset="100%" stop-color="#33B5C7" />
+    </linearGradient>
+    <filter id="subtle-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  <!-- Background squircle (Material 3 Adaptive Icon style) -->
+  <rect width="512" height="512" rx="128" fill="url(#m3-teal-grad)" />
+  
+  <!-- Subtle inner ambient glow -->
+  <circle cx="256" cy="256" r="180" fill="white" opacity="0.04" />
+  
+  <!-- LineageOS Nodes and Interconnect Network -->
+  <g filter="url(#subtle-shadow)">
+    <!-- Circuit connections -->
+    <path d="M160 256 L256 160 M256 160 L352 256 M160 256 L256 352 M256 352 L352 256" 
+          stroke="url(#node-accent)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <path d="M160 256 L352 256" 
+          stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="16" stroke-linecap="round" />
+
+    <!-- Central core node -->
+    <circle cx="256" cy="256" r="38" fill="#FFFFFF" />
+    <circle cx="256" cy="256" r="22" fill="#006874" />
+    
+    <!-- Top node -->
+    <circle cx="256" cy="160" r="30" fill="url(#node-accent)" />
+    <circle cx="256" cy="160" r="16" fill="#00363D" />
+
+    <!-- Bottom node -->
+    <circle cx="256" cy="352" r="30" fill="url(#node-accent)" />
+    <circle cx="256" cy="352" r="16" fill="#00363D" />
+
+    <!-- Left node -->
+    <circle cx="160" cy="256" r="30" fill="url(#node-accent)" />
+    <circle cx="160" cy="256" r="16" fill="#00363D" />
+
+    <!-- Right node -->
+    <circle cx="352" cy="256" r="30" fill="url(#node-accent)" />
+    <circle cx="352" cy="256" r="16" fill="#00363D" />
+  </g>
+</svg>

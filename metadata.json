@@ -1,0 +1,6 @@
+{
+  "name": "LineageOS Web Hub",
+  "description": "Discover, download, verify and explore LineageOS builds, community GSIs, historical archives, recovery trackers, and developer utilities powered by Puter.js.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
