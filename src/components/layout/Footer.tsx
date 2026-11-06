@@ -13,10 +13,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Brand & Mission */}
         <div className="max-w-md space-y-2">
           <div className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            <span>LineageOS Web Hub</span>
+            <span>DroidROM Web Hub</span>
           </div>
           <p className="leading-relaxed text-[11px] text-slate-500 dark:text-slate-400">
-            An open Android community platform providing verified official LineageOS build discovery, historical archive access, Treble GSI compatibility tooling, and browser-based firmware verification utilities.
+            An open Android community platform providing verified LineageOS build discovery, dotOS bespoke aesthetic releases, Pixel UI / PixelOS ports, Treble GSI compatibility tooling, and browser-based firmware verification utilities.
           </p>
           <div className="text-[10px] text-slate-400 pt-1">
             Built with Puter.js and Google Material 3 design system.
@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Quick Links */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 text-[11px]">
           <div>
-            <div className="font-semibold text-slate-800 dark:text-slate-200 mb-2">Platform</div>
+            <div className="font-semibold text-slate-800 dark:text-slate-200 mb-2">Ecosystems</div>
             <ul className="space-y-1.5">
               <li>
                 <button onClick={() => onNavigate('dashboard')} className="hover:text-teal-600 cursor-pointer">
@@ -40,17 +40,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <button onClick={() => onNavigate('downloads')} className="hover:text-teal-600 cursor-pointer">
-                  ROM Downloads
+                  LineageOS Builds
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('archive')} className="hover:text-teal-600 cursor-pointer">
-                  Historical Archives
+                <button onClick={() => onNavigate('dotos')} className="hover:text-red-500 cursor-pointer">
+                  dotOS Ecosystem
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate('pixelui')} className="hover:text-blue-500 cursor-pointer">
+                  Pixel UI / PixelOS
                 </button>
               </li>
               <li>
                 <button onClick={() => onNavigate('gsi')} className="hover:text-teal-600 cursor-pointer">
-                  GSI Discovery
+                  Treble GSI
                 </button>
               </li>
             </ul>
@@ -92,22 +97,32 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-1.5">
               <li>
                 <a
-                  href="https://wiki.lineageos.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 hover:text-teal-600"
-                >
-                  LineageOS Wiki <ExternalLink className="w-2.5 h-2.5" />
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://download.lineageos.org"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 hover:text-teal-600"
                 >
-                  Official Downloads <ExternalLink className="w-2.5 h-2.5" />
+                  LineageOS Official <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/DotOS"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-red-500"
+                >
+                  dotOS Project <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://pixelos.net"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-blue-500"
+                >
+                  PixelOS Official <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </li>
               <li>
@@ -120,16 +135,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   TimSchumi Archive <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://github.com/tahmidgaming700/lineageos-archive-downloader"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 hover:text-teal-600"
-                >
-                  GitHub Repository <ExternalLink className="w-2.5 h-2.5" />
-                </a>
-              </li>
             </ul>
           </div>
         </div>
@@ -139,7 +144,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto mt-8 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
         <div className="flex items-center gap-1.5">
           <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-          <span>Independent community utility. Not affiliated with or endorsed by LineageOS or Google LLC.</span>
+          <span>Independent community utility. Not affiliated with or endorsed by LineageOS, dotOS, PixelOS, or Google LLC.</span>
         </div>
         <div className="flex items-center gap-1">
           <span>Created for the Android enthusiast community</span>

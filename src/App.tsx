@@ -14,6 +14,8 @@ import { Footer } from './components/layout/Footer';
 import { HomeDashboard } from './components/dashboard/HomeDashboard';
 import { DeviceExplorer } from './components/devices/DeviceExplorer';
 import { RomDownloadCenter } from './components/downloads/RomDownloadCenter';
+import { DotOsExplorer } from './components/roms/DotOsExplorer';
+import { PixelUiExplorer } from './components/roms/PixelUiExplorer';
 import { HistoricalArchiveExplorer } from './components/archive/HistoricalArchiveExplorer';
 import { GsiDiscoveryCenter } from './components/gsi/GsiDiscoveryCenter';
 import { GsiCompatibilityLab } from './components/gsi/GsiCompatibilityLab';
@@ -234,6 +236,20 @@ export default function App() {
               onNavigateToVerifier={handleNavigateToVerifier}
               bookmarkedBuilds={preferences.bookmarkedBuilds}
               onToggleBookmarkBuild={handleToggleBookmarkBuild}
+            />
+          )}
+
+          {currentSection === 'dotos' && (
+            <DotOsExplorer
+              onSelectDeviceForDownload={handleSelectDeviceForDownload}
+              onNavigateToVerifier={handleNavigateToVerifier}
+            />
+          )}
+
+          {currentSection === 'pixelui' && (
+            <PixelUiExplorer
+              onSelectDeviceForDownload={handleSelectDeviceForDownload}
+              onNavigateToVerifier={handleNavigateToVerifier}
             />
           )}
 

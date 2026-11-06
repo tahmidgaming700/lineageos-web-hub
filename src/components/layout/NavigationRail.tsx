@@ -11,6 +11,8 @@ import {
   BookOpen,
   Activity,
   BookmarkCheck,
+  Palette,
+  Sparkles,
 } from 'lucide-react';
 import { AppSection } from '../../types';
 
@@ -36,9 +38,11 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'devices', label: 'Device Explorer', icon: Smartphone },
     { id: 'downloads', label: 'ROM Downloads', icon: DownloadCloud },
-    { id: 'archive', label: 'Historical Archives', icon: Archive },
+    { id: 'dotos', label: 'dotOS Ecosystem', icon: Palette },
+    { id: 'pixelui', label: 'Pixel UI / PixelOS', icon: Sparkles },
     { id: 'gsi', label: 'Treble GSI', icon: Layers },
     { id: 'compatibility', label: 'Compatibility Lab', icon: Cpu },
+    { id: 'archive', label: 'Historical Archives', icon: Archive },
     { id: 'recovery', label: 'Harmony Recovery', icon: ShieldCheck },
     { id: 'toolbox', label: 'Dev Toolbox', icon: Wrench },
     { id: 'guides', label: 'Installation Guides', icon: BookOpen },
@@ -52,7 +56,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
         <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#8E95A0]">
           Android Ecosystem
         </div>
-        {items.slice(0, 7).map((item) => {
+        {items.slice(0, 8).map((item) => {
           const Icon = item.icon;
           const isActive = currentSection === item.id;
           return (
@@ -79,7 +83,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
         <div className="mt-4 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#8E95A0]">
           Tools & References
         </div>
-        {items.slice(7).map((item) => {
+        {items.slice(8).map((item) => {
           const Icon = item.icon;
           const isActive = currentSection === item.id;
           return (

@@ -87,6 +87,23 @@ async function runTests() {
   assert(validTargetRegex.test('recoveryimage'), 'Build target recoveryimage passes');
   assert(validTargetRegex.test('lineage_akita-userdebug'), 'Lunch target lineage_akita-userdebug passes');
 
+  // Test 6: Multi-ROM Datasets (dotOS & Pixel UI)
+  console.log('\n[Test Suite 6: Multi-ROM Datasets]');
+  const { DOTOS_BUILDS } = await import('../src/data/dotosData');
+  const { PIXEL_UI_BUILDS } = await import('../src/data/pixeluiData');
+
+  assert(DOTOS_BUILDS.length >= 5, 'Contains at least 5 verified dotOS builds');
+  const dotosAlioth = DOTOS_BUILDS.find((b) => b.device === 'alioth');
+  assert(!!dotosAlioth, 'dotOS POCO F3 (alioth) build exists');
+  assert(dotosAlioth?.version === '5.2', 'dotOS alioth version is 5.2');
+  assert(Boolean(dotosAlioth?.downloadUrl.startsWith('https://sourceforge.net')), 'dotOS download URL points to SourceForge');
+
+  assert(PIXEL_UI_BUILDS.length >= 5, 'Contains at least 5 verified Pixel UI builds');
+  const pixelAkita = PIXEL_UI_BUILDS.find((b) => b.device === 'akita');
+  assert(!!pixelAkita, 'PixelOS Pixel 8a (akita) build exists');
+  assert(pixelAkita?.androidVersion === 'Android 14', 'PixelOS akita is Android 14');
+  assert(Boolean(pixelAkita?.downloadUrl.includes('pixelos.net')), 'PixelOS download URL is official');
+
   console.log(`\n========================================`);
   console.log(`Total tests executed: ${passed + failed}`);
   console.log(`Passed: ${passed}`);

@@ -1,3 +1,8 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   DownloadCloud,
@@ -16,9 +21,17 @@ import {
   Lock,
   Zap,
   Check,
+  Palette,
 } from 'lucide-react';
-import { AppSection, LineageDevice } from '../../types';
+import { AppSection } from '../../types';
 import { fetchDevices, fetchBuilds } from '../../lib/api';
+import {
+  HERO_ROM_TRIO_IMAGE,
+  PIXEL_PHONE_IMAGE,
+  POCO_PHONE_IMAGE,
+  ONEPLUS_PHONE_IMAGE,
+  SAMSUNG_PHONE_IMAGE,
+} from '../../lib/deviceImages';
 
 interface HomeDashboardProps {
   onNavigate: (section: AppSection, meta?: any) => void;
@@ -34,8 +47,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   onSelectDeviceForDownload,
 }) => {
   const [deviceCount, setDeviceCount] = useState<number>(641);
-  const [akitaBuild, setAkitaBuild] = useState<any>(null);
-  const [aliothBuild, setAliothBuild] = useState<any>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -46,18 +57,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       })
       .catch((err) => console.warn('Dashboard devices fetch error:', err));
 
-    fetchBuilds('akita')
-      .then((builds) => {
-        if (mounted && builds.length > 0) setAkitaBuild(builds[0]);
-      })
-      .catch((err) => console.warn('Akita builds fetch error:', err));
-
-    fetchBuilds('alioth')
-      .then((builds) => {
-        if (mounted && builds.length > 0) setAliothBuild(builds[0]);
-      })
-      .catch((err) => console.warn('Alioth builds fetch error:', err));
-
     return () => {
       mounted = false;
     };
@@ -66,67 +65,118 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   return (
     <div className="space-y-20 max-w-5xl mx-auto pb-24 text-slate-900 dark:text-white transition-colors">
       {/* =========================================================================
-          SECTION 1: HERO (Inspired directly by Umbrel "Install on your own hardware")
+          SECTION 1: HERO (Umbrel "Install on your own hardware" with Real Phones Hero)
           ========================================================================= */}
-      <section className="text-center pt-6 sm:pt-12 space-y-6">
+      <section className="text-center pt-6 sm:pt-10 space-y-6">
         {/* Version Badge Pill */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-[#15171a] border border-slate-300/80 dark:border-white/10 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-xs">
-          <span className="w-5 h-5 rounded-full bg-teal-600 flex items-center justify-center text-white text-[10px] font-black">
-            L
-          </span>
-          <span>LineageOS 21.0 Official</span>
+          <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+          <span>DroidROM Web Hub · LineageOS · dotOS · Pixel UI</span>
         </div>
 
         {/* Big Bold Headline */}
         <div className="space-y-1">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-balance">
-            Install LineageOS<br />
+            Install Custom Android<br />
             <span className="text-slate-500 dark:text-[#8E95A0] font-normal">on your</span><br />
             own hardware.
           </h1>
         </div>
 
         {/* Subhead */}
-        <p className="max-w-xl mx-auto text-base sm:text-lg text-slate-600 dark:text-[#8E95A0] leading-relaxed">
-          Tell us about your machine. We'll plan your recovery, verify your checksums, and walk you through the rest.
+        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-[#8E95A0] leading-relaxed">
+          The unified platform for discovering official LineageOS nightlies, dotOS bespoke aesthetic releases, Pixel UI Tensor experiences, and Project Treble GSIs with cryptographic hash validation.
         </p>
 
-        {/* Underline link */}
-        <div>
-          <button
-            onClick={() => onNavigate('downloads')}
-            className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 underline underline-offset-4 cursor-pointer transition-colors"
-          >
-            Know what you need? See all downloads
-          </button>
+        {/* Real Phone Trio Studio Showcase */}
+        <div className="pt-2 max-w-4xl mx-auto">
+          <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl bg-[#060708]">
+            <img
+              src={HERO_ROM_TRIO_IMAGE}
+              alt="LineageOS, dotOS, and Pixel UI on real Android flagship smartphones"
+              className="w-full aspect-16/9 object-cover"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4 w-full text-white text-xs">
+                <div className="flex items-center gap-4">
+                  <span className="font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-teal-400" />
+                    LineageOS 21.0
+                  </span>
+                  <span className="text-slate-400">·</span>
+                  <span className="font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-red-400" />
+                    dotOS Bespoke v5.2
+                  </span>
+                  <span className="text-slate-400">·</span>
+                  <span className="font-bold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-400" />
+                    Pixel UI & PixelOS
+                  </span>
+                </div>
+                <button
+                  onClick={() => onNavigate('downloads')}
+                  className="umbrel-btn-white text-xs px-3.5 py-1.5"
+                >
+                  Browse All Builds →
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Two License / Feature Cards (Matching Umbrel's Free for Personal / OEM cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto text-left pt-6">
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-teal-500/15 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-lg">
-              🛡️
+        {/* Three Ecosystem Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto text-left pt-4">
+          {/* Card 1: LineageOS */}
+          <div
+            onClick={() => onNavigate('downloads')}
+            className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3 cursor-pointer hover:border-teal-500/50 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-sm">
+              LOS
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Free & Open Source.
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 transition-colors">
+                LineageOS Official
               </h3>
               <p className="text-xs text-slate-600 dark:text-[#8E95A0] mt-1.5 leading-relaxed">
-                Install LineageOS on your device at no cost, with automated nightly updates included. Built under Apache 2.0 & GPL without surveillance.
+                Clean, unbloated AOSP with privacy protection, monthly security bulletins, and verified hardware maintenance.
               </p>
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg">
-              ⚡
+          {/* Card 2: dotOS */}
+          <div
+            onClick={() => onNavigate('dotos')}
+            className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3 cursor-pointer hover:border-red-500/50 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-red-500/15 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-sm">
+              dot
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Treble GSI & Custom Recovery?
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-red-500 transition-colors">
+                dotOS Bespoke UI
               </h3>
               <p className="text-xs text-slate-600 dark:text-[#8E95A0] mt-1.5 leading-relaxed">
-                Discover generic system images from AndyYan & ponces, fastbootd command guides, and Harmony Recovery tools.
+                Handcrafted Control Center, circular settings hierarchy, artistic lockscreens, and dynamic accent monetization.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3: Pixel UI */}
+          <div
+            onClick={() => onNavigate('pixelui')}
+            className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3 cursor-pointer hover:border-blue-500/50 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
+              PX
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                Pixel UI & PixelOS
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-[#8E95A0] mt-1.5 leading-relaxed">
+                Native Pixel Launcher, At a Glance, unlimited Google Photos cloud backups, and offline Now Playing music ID.
               </p>
             </div>
           </div>
@@ -134,28 +184,31 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       </section>
 
       {/* =========================================================================
-          SECTION 2: "What will LineageOS run on?" (Bento Grid with 3D-styled cards)
+          SECTION 2: "What will our ROMs run on?" (Bento Grid with Real Phone Photography)
           ========================================================================= */}
       <section className="space-y-6">
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-          What will LineageOS run on?
+          What will our ROMs run on?
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
           {/* Bento Card 1: Google Pixel */}
           <div
             onClick={() => onSelectDeviceForDownload('akita')}
-            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-teal-600 group-hover:scale-105 transition-transform">
-              📱
+            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#181B1F] border border-slate-200 dark:border-white/10 group-hover:scale-105 transition-transform">
+              <img src={PIXEL_PHONE_IMAGE} alt="Google Pixel" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                 Google Pixel
               </div>
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
-                Tensor G3, G2, G1 & Snapdragon
+                Pixel 8a, 8 Pro, 7a, 6, 5 & 4a
+              </div>
+              <div className="text-[10px] text-teal-600 dark:text-teal-400 font-bold mt-1">
+                LineageOS · dotOS · PixelOS
               </div>
             </div>
           </div>
@@ -163,35 +216,41 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           {/* Bento Card 2: Xiaomi & POCO */}
           <div
             onClick={() => onSelectDeviceForDownload('alioth')}
-            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-sky-600 group-hover:scale-105 transition-transform">
-              ⚡
+            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#181B1F] border border-slate-200 dark:border-white/10 group-hover:scale-105 transition-transform">
+              <img src={POCO_PHONE_IMAGE} alt="Xiaomi and POCO" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                 Xiaomi & POCO
               </div>
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
-                POCO F3, X3 Pro, Redmi Note 10
+                POCO F3, X3 Pro, Redmi Note 10 Pro
+              </div>
+              <div className="text-[10px] text-teal-600 dark:text-teal-400 font-bold mt-1">
+                LineageOS · dotOS · PixelOS
               </div>
             </div>
           </div>
 
-          {/* Bento Card 3: OnePlus & Nothing */}
+          {/* Bento Card 3: OnePlus Flagships */}
           <div
             onClick={() => onSelectDeviceForDownload('aston')}
-            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-rose-600 group-hover:scale-105 transition-transform">
-              🔥
+            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#181B1F] border border-slate-200 dark:border-white/10 group-hover:scale-105 transition-transform">
+              <img src={ONEPLUS_PHONE_IMAGE} alt="OnePlus Flagships" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                OnePlus & Nothing
+                OnePlus Flagships
               </div>
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
-                OnePlus 12R, 11, Phone (1) & (2)
+                OnePlus 12R, 9 Pro, 8T, 7 Pro
+              </div>
+              <div className="text-[10px] text-teal-600 dark:text-teal-400 font-bold mt-1">
+                LineageOS · dotOS · PixelOS
               </div>
             </div>
           </div>
@@ -199,17 +258,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           {/* Bento Card 4: Samsung Galaxy */}
           <div
             onClick={() => onSelectDeviceForDownload('a52sxq')}
-            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-indigo-600 group-hover:scale-105 transition-transform">
-              ✨
+            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#181B1F] border border-slate-200 dark:border-white/10 group-hover:scale-105 transition-transform">
+              <img src={SAMSUNG_PHONE_IMAGE} alt="Samsung Galaxy" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                 Samsung Galaxy
               </div>
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
-                A52s 5G, S10, S9, Note 10
+                A52s 5G, S10, Note 10, S9
+              </div>
+              <div className="text-[10px] text-teal-600 dark:text-teal-400 font-bold mt-1">
+                LineageOS · PixelOS Ports
               </div>
             </div>
           </div>
@@ -217,9 +279,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           {/* Bento Card 5: Treble GSI */}
           <div
             onClick={() => onNavigate('gsi')}
-            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-amber-500 group-hover:scale-105 transition-transform">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
               🧩
             </div>
             <div>
@@ -227,17 +289,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 Treble GSI
               </div>
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
-                Generic System Image (ARM64/A32)
+                Generic System Images (ARM64)
+              </div>
+              <div className="text-[10px] text-amber-500 font-bold mt-1">
+                Any Treble-compliant device
               </div>
             </div>
           </div>
 
-          {/* Bento Card 6: Something else? See all 640+ */}
+          {/* Bento Card 6: Something else? */}
           <div
             onClick={() => onNavigate('devices')}
-            className="p-5 sm:p-6 rounded-3xl bg-slate-50 dark:bg-[#14171A] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+            className="p-5 sm:p-6 rounded-3xl bg-slate-50 dark:bg-[#14171A] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-56 sm:h-60 group shadow-xs"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-200 dark:bg-[#202428] flex items-center justify-center text-xl text-teal-600 group-hover:scale-105 transition-transform">
+            <div className="w-14 h-14 rounded-2xl bg-slate-200 dark:bg-[#202428] flex items-center justify-center text-2xl text-teal-600 group-hover:scale-105 transition-transform">
               🔍
             </div>
             <div>
@@ -247,21 +312,24 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
                 Browse all {deviceCount}+ devices
               </div>
+              <div className="text-[10px] text-slate-400 font-bold mt-1">
+                OEMs & Legacy Archives
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Featured Hardware Hero Card (Like "Designed for umbrelOS") */}
+        {/* Featured Hardware Hero Card */}
         <div className="p-8 sm:p-10 rounded-3xl bg-linear-to-b from-[#14171A] to-[#0A0B0C] border border-white/10 text-white space-y-6">
           <div className="max-w-xl space-y-3">
             <span className="text-xs font-mono font-bold tracking-wider uppercase text-teal-400">
-              Verified & Tested
+              Verified Open Architecture
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Designed for open hardware freedom.
             </h3>
             <p className="text-xs sm:text-sm text-[#8E95A0] leading-relaxed">
-              Official LineageOS builds ship with verified Lineage Recovery, fastbootd compatibility, automated nightly OTA updates, and SHA-256 cryptographic hashes.
+              Every build in our hub is verified against upstream source repositories with cryptographic integrity digests. Whether you prefer the clean foundation of LineageOS, the visual artistry of dotOS, or the AI perks of Pixel UI, your phone is in your control.
             </p>
           </div>
 
@@ -273,62 +341,71 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               Explore Verified Devices
             </button>
             <button
-              onClick={() => onNavigate('compatibility')}
+              onClick={() => onNavigate('dotos')}
               className="umbrel-btn-pill"
             >
-              GSI Compatibility Lab
+              Explore dotOS
+            </button>
+            <button
+              onClick={() => onNavigate('pixelui')}
+              className="umbrel-btn-pill"
+            >
+              Explore Pixel UI
             </button>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 3: DOWNLOADS (Exact Umbrel downloads card styling & layout)
+          SECTION 3: DOWNLOADS HIGHLIGHTS (Featuring Real Phone Photos)
           ========================================================================= */}
       <section className="space-y-6">
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-          Downloads
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            Popular Downloads
+          </h2>
+          <button
+            onClick={() => onNavigate('downloads')}
+            className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline"
+          >
+            See all builds →
+          </button>
+        </div>
 
         <div className="space-y-4">
-          {/* Target 1: Google Pixel 8a */}
+          {/* Target 1: Google Pixel 8a with Real Photo */}
           <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
-                  📱
+                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 shrink-0">
+                  <img src={PIXEL_PHONE_IMAGE} alt="Google Pixel 8a" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                     Google Pixel 8a <span className="font-mono text-xs font-semibold text-teal-600 dark:text-teal-400">akita</span>
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
-                    Official LineageOS nightly build for Tensor G3. Full recovery, boot.img, vendor_boot, and OTA payload verification.
+                    Official LineageOS 21.0 & PixelOS Android 14 builds for Tensor G3. Full recovery, boot.img, vendor_boot, and OTA payload verification.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="text-xs text-slate-400 font-mono">
-              ROM package · 1.4 GB · Android 14 (API 34) · Nightly
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 font-mono">
+              <span className="text-teal-600 dark:text-teal-400 font-bold">LineageOS 21.0 Nightly</span>
+              <span>·</span>
+              <span className="text-blue-500 font-bold">PixelOS 14 (QPR3)</span>
+              <span>·</span>
+              <span>Tensor G3 · 120Hz OLED</span>
             </div>
 
-            {/* Umbrel style action buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 onClick={() => onSelectDeviceForDownload('akita')}
                 className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
               >
                 <DownloadCloud className="w-4 h-4" />
-                <span>LineageOS 21.0 Nightly</span>
-              </button>
-
-              <button
-                onClick={() => onSelectDeviceForDownload('akita')}
-                className="umbrel-btn-pill"
-              >
-                <DownloadCloud className="w-4 h-4" />
-                <span>Recovery Image</span>
+                <span>Get akita Builds</span>
               </button>
 
               <button
@@ -341,26 +418,30 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             </div>
           </div>
 
-          {/* Target 2: POCO F3 / Redmi K40 */}
+          {/* Target 2: POCO F3 with Real Photo */}
           <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
-                  ⚡
+                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 shrink-0">
+                  <img src={POCO_PHONE_IMAGE} alt="POCO F3" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                     POCO F3 / Redmi K40 <span className="font-mono text-xs font-semibold text-teal-600 dark:text-teal-400">alioth</span>
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
-                    High performance Snapdragon 870 build with 120Hz display refresh calibration, dynamic super partitions, and dual stereo audio.
+                    Flagship Snapdragon 870 support across LineageOS, dotOS v5.2, and PixelOS. 120Hz display refresh calibration and dual stereo audio.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="text-xs text-slate-400 font-mono">
-              ROM package · 1.3 GB · Android 14 (API 34) · Nightly
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 font-mono">
+              <span className="text-teal-600 dark:text-teal-400 font-bold">LineageOS 21.0</span>
+              <span>·</span>
+              <span className="text-red-500 font-bold">dotOS 5.2</span>
+              <span>·</span>
+              <span className="text-blue-500 font-bold">PixelOS 14</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -369,15 +450,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
               >
                 <DownloadCloud className="w-4 h-4" />
-                <span>LineageOS 21.0 Nightly</span>
-              </button>
-
-              <button
-                onClick={() => onSelectDeviceForDownload('alioth')}
-                className="umbrel-btn-pill"
-              >
-                <DownloadCloud className="w-4 h-4" />
-                <span>Recovery Image</span>
+                <span>Get alioth Builds</span>
               </button>
 
               <button
@@ -385,55 +458,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
               >
                 <span>Install guide</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Target 3: Community Treble GSI */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
-                  🧩
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    Community Treble GSI <span className="font-mono text-xs font-semibold text-sky-500">ARM64 & ARM32</span>
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
-                    By AndyYan and ponces. Generic System Images for any Project Treble compatible phone. Flash with fastbootd.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-xs text-slate-400 font-mono">
-              Raw system image (.img.xz) · 980 MB · Android 14
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => onNavigate('gsi')}
-                className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
-              >
-                <DownloadCloud className="w-4 h-4" />
-                <span>GSI arm64_bgN (GApps)</span>
-              </button>
-
-              <button
-                onClick={() => onNavigate('gsi')}
-                className="umbrel-btn-pill"
-              >
-                <DownloadCloud className="w-4 h-4" />
-                <span>GSI arm64_bvN (Vanilla)</span>
-              </button>
-
-              <button
-                onClick={() => onNavigate('compatibility')}
-                className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
-              >
-                <span>Compatibility check</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -442,74 +466,55 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       </section>
 
       {/* =========================================================================
-          SECTION 4: STORYTELLING & EDITORIAL (Matching Screenshot 2 "Your cloud, in your home")
+          SECTION 4: PHILOSOPHY & CONTROL (Matching Umbrel's "Your data, in your control")
           ========================================================================= */}
-      <section className="text-center space-y-12 pt-8">
+      <section className="space-y-12 pt-8 border-t border-slate-200/80 dark:border-white/10">
         <div className="space-y-4">
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-            Your phone,<br />
-            in your <em className="italic font-serif font-normal text-teal-600 dark:text-teal-400">control</em>.
+            Your phone, in your <span className="italic font-serif">control</span>.
           </h2>
-          <p className="max-w-lg mx-auto text-base sm:text-lg text-slate-600 dark:text-[#8E95A0]">
-            You've been renting your digital life from ad companies. Time to <span className="font-bold underline decoration-teal-500 decoration-2">own it</span>.
+          <p className="text-sm sm:text-base text-slate-600 dark:text-[#8E95A0] max-w-2xl leading-relaxed">
+            You've been renting your digital life from surveillance-driven OEM skins and locked bootloaders. Time to own your phone with verified open-source operating systems.
           </p>
         </div>
 
-        {/* 3 Pillars Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          {/* Pillar 1 */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
-            <div className="text-3xl">🔒</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
+              <Shield className="w-5 h-5" />
+            </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Zero Telemetry
+              Zero Telemetry Bloat
             </h3>
             <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
-              Every photo, file, and message stays on hardware you own. No background diagnostic trackers reporting your habits to corporate servers.
+              No manufacturer spyware, forced background telemetry, or unremovable third-party apps consuming RAM and battery.
             </p>
           </div>
 
-          {/* Pillar 2 */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
-            <div className="text-3xl">🌱</div>
+          <div className="space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-red-500/15 text-red-600 dark:text-red-400 flex items-center justify-center font-bold">
+              <Palette className="w-5 h-5" />
+            </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Device Longevity
+              Unrivaled Customization
             </h3>
             <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
-              Don't throw away a perfectly good phone because the OEM ended security updates. LineageOS keeps hardware running smoothly for 7+ years.
+              From dotOS bespoke Control Center tiles to Google Pixel Material You monetization, adapt every pixel of your interface.
             </p>
           </div>
 
-          {/* Pillar 3 */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
-            <div className="text-3xl">🛠️</div>
+          <div className="space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+              <Zap className="w-5 h-5" />
+            </div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Root & Freedom
+              Hardware Longevity
             </h3>
             <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
-              Install Magisk root, microG open services, or pure AOSP vanilla. You decide what apps, permissions, and background processes run on your CPU.
+              Keep your devices running smoothly years after official manufacturer support expires with modern Android updates.
             </p>
           </div>
         </div>
-      </section>
-
-      {/* Quick Access to Developer Toolbox */}
-      <section className="p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
-        <div className="space-y-1">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-            Need to calculate SHA-256 or inspect build.prop?
-          </h3>
-          <p className="text-xs text-slate-500 dark:text-[#8E95A0]">
-            Use our 10 browser-based developer utilities. Calculates hashes locally with zero uploads.
-          </p>
-        </div>
-
-        <button
-          onClick={() => onNavigate('toolbox')}
-          className="umbrel-btn-white shrink-0"
-        >
-          <span>Open Developer Toolbox</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
       </section>
     </div>
   );

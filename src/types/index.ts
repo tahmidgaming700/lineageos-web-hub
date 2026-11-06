@@ -11,6 +11,7 @@ export interface LineageDevice {
   release_year?: number;
   screen?: string;
   wiki_url?: string;
+  supportedRoms?: ('lineageos' | 'dotos' | 'pixelui')[];
 }
 
 export interface LineageFile {
@@ -92,6 +93,45 @@ export interface AddonRelease {
   }[];
 }
 
+export type CustomRomId = 'lineageos' | 'dotos' | 'pixelui';
+
+export interface DotOsBuild {
+  id: string;
+  device: string;
+  deviceName: string;
+  oem: string;
+  version: string;
+  androidVersion: string;
+  releaseDate: string;
+  filename: string;
+  fileSize: string;
+  downloadUrl: string;
+  packageType: 'GApps' | 'Vanilla';
+  sha256?: string;
+  features: string[];
+  maintainer?: string;
+  changelog?: string[];
+}
+
+export interface PixelUiBuild {
+  id: string;
+  device: string;
+  deviceName: string;
+  oem: string;
+  romName: 'PixelOS' | 'Pixel Experience' | 'Pixel UI GSI';
+  version: string;
+  androidVersion: string;
+  releaseDate: string;
+  filename: string;
+  fileSize: string;
+  downloadUrl: string;
+  recoveryUrl?: string;
+  sha256?: string;
+  features: string[];
+  maintainer?: string;
+  changelog?: string[];
+}
+
 export interface HarmonyRecoveryConfig {
   manifestUrl: string;
   branch: string;
@@ -104,6 +144,8 @@ export type AppSection =
   | 'dashboard'
   | 'devices'
   | 'downloads'
+  | 'dotos'
+  | 'pixelui'
   | 'archive'
   | 'gsi'
   | 'compatibility'
@@ -122,6 +164,7 @@ export interface UserPreferences {
     version: string;
     date: string;
     url: string;
+    romType?: CustomRomId;
   }[];
   personalNotes: Record<string, string>; // codename -> note
 }

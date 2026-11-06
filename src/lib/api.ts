@@ -48,6 +48,7 @@ export async function fetchDevices(params?: { oem?: string; query?: string }): P
           release_year: extra?.release_year,
           screen: extra?.screen,
           wiki_url: `https://wiki.lineageos.org/devices/${device.model}/`,
+          supportedRoms: extra?.supportedRoms || ['lineageos'],
         };
       });
     }
@@ -215,6 +216,8 @@ export interface SearchResult {
 }
 
 const SEARCH_ENTRIES = [
+  { title: 'dotOS Ecosystem & Bespoke Builds', subtitle: 'Explore dotOS v5.2, bespoke Control Center, and art lockscreens', targetSection: 'dotos' },
+  { title: 'Pixel UI & PixelOS Hub', subtitle: 'Google Pixel experience, Pixel Launcher, At a Glance, and unlimited Photos', targetSection: 'pixelui' },
   { title: 'SHA-256 Calculator', subtitle: 'Compute SHA-256 hash in browser using Web Crypto', targetSection: 'toolbox', toolId: 'sha256' },
   { title: 'File Checksum Verifier', subtitle: 'Compare ROM zip digest against expected hash', targetSection: 'toolbox', toolId: 'verifier' },
   { title: 'Build.prop Viewer & Parser', subtitle: 'Inspect system properties, Treble flags & API level', targetSection: 'toolbox', toolId: 'buildprop' },

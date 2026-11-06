@@ -42,11 +42,14 @@ export const Header: React.FC<HeaderProps> = ({
             <path d="M12 2a10 10 0 0 0-10 10c0 4.4 2.8 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.2-4.5-1.1-4.5-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .9-.3 2.8 1a9.8 9.8 0 0 1 5.2 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.7.7 1 1.6 1 2.7 0 3.9-2.3 4.8-4.5 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 22 12A10 10 0 0 0 12 2z" />
           </svg>
         </div>
-        <span className="font-extrabold tracking-tight">LineageOS Hub</span>
+        <div className="flex flex-col text-left">
+          <span className="font-extrabold tracking-tight leading-tight">DroidROM Hub</span>
+          <span className="text-[10px] text-slate-400 font-medium tracking-normal -mt-0.5">Lineage · dotOS · Pixel UI</span>
+        </div>
       </button>
 
       {/* Zone 2: Navigation Links */}
-      <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-[#8E95A0]">
+      <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-600 dark:text-[#8E95A0]">
         <button
           onClick={() => onNavigate('devices')}
           className={`hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer ${
@@ -62,6 +65,24 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           Downloads
+        </button>
+        <button
+          onClick={() => onNavigate('dotos')}
+          className={`hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer flex items-center gap-1 ${
+            currentSection === 'dotos' ? 'text-red-500 font-bold' : ''
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+          <span>dotOS</span>
+        </button>
+        <button
+          onClick={() => onNavigate('pixelui')}
+          className={`hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer flex items-center gap-1 ${
+            currentSection === 'pixelui' ? 'text-blue-500 font-bold' : ''
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+          <span>Pixel UI</span>
         </button>
         <button
           onClick={() => onNavigate('gsi')}
@@ -86,14 +107,6 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           Guides
-        </button>
-        <button
-          onClick={() => onNavigate('archive')}
-          className={`hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer ${
-            currentSection === 'archive' ? 'text-slate-900 dark:text-white font-bold' : ''
-          }`}
-        >
-          Archive
         </button>
       </nav>
 
