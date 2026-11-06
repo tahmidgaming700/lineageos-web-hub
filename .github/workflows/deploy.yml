@@ -28,6 +28,11 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Enable and configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
