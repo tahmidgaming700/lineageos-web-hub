@@ -7,7 +7,6 @@ import {
   AddonRelease,
 } from '../types';
 import { FALLBACK_DEVICES } from '../../server/data/fallbackDevices';
-import { FALLBACK_GSI_RELEASES } from '../../server/data/fallbackGsi';
 
 const GITHUB_HEADERS = { Accept: 'application/vnd.github+json' };
 
@@ -146,7 +145,7 @@ export async function fetchGsiReleases(params?: { arch?: string; variant?: strin
   }));
 
   const live = settled.flatMap((result) => result.status === 'fulfilled' ? result.value : []);
-  const releases = live.length ? live : FALLBACK_GSI_RELEASES;
+  const releases = live;
   return releases.map((release) => ({
     ...release,
     assets: release.assets.filter((asset) =>
@@ -252,15 +251,5 @@ export async function searchGlobal(query: string): Promise<SearchResult[]> {
     targetSection: entry.targetSection,
     meta: 'toolId' in entry ? { toolId: entry.toolId } : undefined,
   }));
-  const gsis = FALLBACK_GSI_RELEASES.filter((release) =>
-    [release.name, release.maintainer, release.lineage_version, ...release.assets.map((asset) => asset.name)]
-      .some((field) => field.toLowerCase().includes(value)),
-  ).map((release) => ({
-    type: 'gsi' as const,
-    title: release.name,
-    subtitle: `${release.maintainer} · ${release.android_version}`,
-    targetSection: 'gsi',
-    meta: release,
-  }));
-  return [...devices, ...tools, ...gsis].slice(0, 20);
+  return [...devices, ...tools].slice(0, 20);
 }
