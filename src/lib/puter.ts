@@ -195,22 +195,10 @@ User inquiry: ${prompt}`;
       }
     }
 
-    // 2. Fallback to server-side endpoint
-    try {
-      const resp = await fetch('/api/assistant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, context }),
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        return data.reply;
-      }
-    } catch (backendErr) {
-      console.error('Server assistant error:', backendErr);
-    }
-
-    return "ROM Assistant is currently offline. You can refer to the official LineageOS Wiki (wiki.lineageos.org) and installation guides in the documentation tab for verified instructions.";
+    // GitHub Pages is static hosting and has no private Express endpoint.
+    // Never send prompts to a non-existent /api route or expose a Gemini key
+    // in browser code. Puter AI is the optional hosted assistant provider.
+    return "ROM Assistant is currently unavailable. Sign in to Puter and try again, or consult the official LineageOS Wiki (wiki.lineageos.org) and the installation guides for verified instructions.";
   }
 }
 
