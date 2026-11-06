@@ -47,9 +47,9 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-[#F2F5F6] dark:bg-[#171D1E] border-r border-slate-200 dark:border-slate-800/80 p-3 select-none">
+    <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-white dark:bg-[#060708] border-r border-slate-200/80 dark:border-white/10 p-3 select-none">
       <div className="flex flex-col gap-1.5 flex-1">
-        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#8E95A0]">
           Android Ecosystem
         </div>
         {items.slice(0, 7).map((item) => {
@@ -61,14 +61,14 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
               onClick={() => onNavigate(item.id)}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-medium transition-all text-left cursor-pointer ${
                 isActive
-                  ? 'bg-teal-700/15 dark:bg-teal-400/20 text-teal-900 dark:text-teal-100 font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-black font-bold shadow-xs'
+                  : 'text-slate-600 dark:text-[#8E95A0] hover:bg-slate-100 dark:hover:bg-[#15171A] hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-700 dark:text-teal-300' : ''}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400 dark:text-teal-600' : ''}`} />
               <span className="truncate flex-1">{item.label}</span>
               {item.badge !== undefined && item.badge > 0 && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-teal-600 text-white font-mono">
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-black/20 dark:bg-black text-white' : 'bg-teal-600 text-white'}`}>
                   {item.badge}
                 </span>
               )}
@@ -76,7 +76,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
           );
         })}
 
-        <div className="mt-4 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <div className="mt-4 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#8E95A0]">
           Tools & References
         </div>
         {items.slice(7).map((item) => {
@@ -88,14 +88,14 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
               onClick={() => onNavigate(item.id)}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-medium transition-all text-left cursor-pointer ${
                 isActive
-                  ? 'bg-teal-700/15 dark:bg-teal-400/20 text-teal-900 dark:text-teal-100 font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-black font-bold shadow-xs'
+                  : 'text-slate-600 dark:text-[#8E95A0] hover:bg-slate-100 dark:hover:bg-[#15171A] hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-700 dark:text-teal-300' : ''}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400 dark:text-teal-600' : ''}`} />
               <span className="truncate flex-1">{item.label}</span>
               {item.badge !== undefined && item.badge > 0 && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-teal-600 text-white font-mono">
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-black/20 dark:bg-black text-white' : 'bg-teal-600 text-white'}`}>
                   {item.badge}
                 </span>
               )}
@@ -105,7 +105,7 @@ export const NavigationRail: React.FC<NavigationRailProps> = ({
       </div>
 
       {/* Disclaimers & Info */}
-      <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 px-3 text-[11px] text-slate-400 dark:text-slate-500 leading-normal">
+      <div className="mt-auto pt-4 border-t border-slate-200/80 dark:border-white/10 px-3 text-[11px] text-slate-400 dark:text-[#8E95A0] leading-normal">
         <div>Independent community platform.</div>
         <div className="text-[10px] text-slate-400/80">Powered by Puter.js & Material 3</div>
       </div>

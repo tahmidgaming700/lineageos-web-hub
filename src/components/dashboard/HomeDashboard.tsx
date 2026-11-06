@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Search,
-  Smartphone,
   DownloadCloud,
-  Layers,
-  Wrench,
-  ShieldAlert,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  Cpu,
-  BookOpen,
+  ExternalLink,
   Sparkles,
+  Smartphone,
+  HardDrive,
+  Cpu,
+  Layers,
+  Archive,
+  Terminal,
+  Shield,
+  Lock,
+  Zap,
+  Check,
 } from 'lucide-react';
 import { AppSection, LineageDevice } from '../../types';
 import { fetchDevices, fetchBuilds } from '../../lib/api';
@@ -30,300 +34,483 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   onSelectDeviceForDownload,
 }) => {
   const [deviceCount, setDeviceCount] = useState<number>(641);
-  const [recentBuilds, setRecentBuilds] = useState<any[]>([]);
-  const [loadingBuilds, setLoadingBuilds] = useState<boolean>(true);
-
-  // Popular devices for quick jumping
-  const popularDevices = [
-    { name: 'Pixel 8a', codename: 'akita', oem: 'Google', soc: 'Tensor G3' },
-    { name: 'POCO F3', codename: 'alioth', oem: 'Xiaomi', soc: 'Snapdragon 870' },
-    { name: 'OnePlus 12R', codename: 'aston', oem: 'OnePlus', soc: 'Snapdragon 8 Gen 2' },
-    { name: 'Galaxy A52s 5G', codename: 'a52sxq', oem: 'Samsung', soc: 'Snapdragon 778G' },
-    { name: 'Redmi Note 10 Pro', codename: 'sweet', oem: 'Xiaomi', soc: 'Snapdragon 732G' },
-    { name: 'Pixel 4a (5G)', codename: 'bramble', oem: 'Google', soc: 'Snapdragon 765G' },
-  ];
+  const [akitaBuild, setAkitaBuild] = useState<any>(null);
+  const [aliothBuild, setAliothBuild] = useState<any>(null);
 
   useEffect(() => {
     let mounted = true;
 
-    async function loadData() {
-      try {
-        const devs = await fetchDevices();
-        if (mounted && devs.length > 0) {
-          setDeviceCount(devs.length);
-        }
-      } catch (err) {
-        console.warn('Dashboard devices fetch:', err);
-      }
+    fetchDevices()
+      .then((devs) => {
+        if (mounted && devs.length > 0) setDeviceCount(devs.length);
+      })
+      .catch((err) => console.warn('Dashboard devices fetch error:', err));
 
-      // Fetch live recent builds for Google Pixel 8a as a real demonstration
-      try {
-        const builds = await fetchBuilds('akita');
-        if (mounted && builds.length > 0) {
-          setRecentBuilds(builds.slice(0, 3));
-        }
-      } catch (err) {
-        console.warn('Dashboard builds fetch:', err);
-      } finally {
-        if (mounted) setLoadingBuilds(false);
-      }
-    }
+    fetchBuilds('akita')
+      .then((builds) => {
+        if (mounted && builds.length > 0) setAkitaBuild(builds[0]);
+      })
+      .catch((err) => console.warn('Akita builds fetch error:', err));
 
-    loadData();
+    fetchBuilds('alioth')
+      .then((builds) => {
+        if (mounted && builds.length > 0) setAliothBuild(builds[0]);
+      })
+      .catch((err) => console.warn('Alioth builds fetch error:', err));
+
     return () => {
       mounted = false;
     };
   }, []);
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-linear-to-br from-teal-900/10 via-teal-800/5 to-transparent border border-teal-500/20 p-6 sm:p-10">
-        <div className="max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-teal-800 dark:text-teal-300">
-            <span>Independent Android Community Platform</span>
-            <span>·</span>
-            <span>Material 3</span>
-          </div>
+    <div className="space-y-20 max-w-5xl mx-auto pb-24 text-slate-900 dark:text-white transition-colors">
+      {/* =========================================================================
+          SECTION 1: HERO (Inspired directly by Umbrel "Install on your own hardware")
+          ========================================================================= */}
+      <section className="text-center pt-6 sm:pt-12 space-y-6">
+        {/* Version Badge Pill */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-[#15171a] border border-slate-300/80 dark:border-white/10 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-xs">
+          <span className="w-5 h-5 rounded-full bg-teal-600 flex items-center justify-center text-white text-[10px] font-black">
+            L
+          </span>
+          <span>LineageOS 21.0 Official</span>
+        </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white text-balance">
-            LineageOS Web Hub
+        {/* Big Bold Headline */}
+        <div className="space-y-1">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-balance">
+            Install LineageOS<br />
+            <span className="text-slate-500 dark:text-[#8E95A0] font-normal">on your</span><br />
+            own hardware.
           </h1>
-
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Discover official LineageOS firmware, download verified packages with SHA-256 integrity, explore community Treble GSIs, and utilize browser-based developer utilities.
-          </p>
-
-          {/* Quick Search Action */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={onOpenSearch}
-              className="flex items-center justify-between gap-3 px-5 py-3 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-300 dark:border-slate-700 shadow-xs hover:border-teal-500 text-slate-500 dark:text-slate-400 text-xs sm:text-sm w-full max-w-md transition-all cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <Search className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-                <span>Search by device name, codename, or tool...</span>
-              </div>
-              <kbd className="px-2 py-0.5 text-[10px] font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-sm">
-                ⌘K
-              </kbd>
-            </button>
-
-            <button
-              onClick={onOpenAssistant}
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow-xs"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Ask ROM Assistant</span>
-            </button>
-          </div>
         </div>
 
-        {/* Live Metrics Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-teal-500/15">
-          <div className="space-y-1">
-            <div className="text-2xl font-bold font-mono tabular-nums text-slate-900 dark:text-white">
-              {deviceCount}+
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Supported Devices</div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-2xl font-bold font-mono tabular-nums text-teal-600 dark:text-teal-400">
-              Official
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">LineageOS Build API</div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-2xl font-bold font-mono tabular-nums text-slate-900 dark:text-white">
-              SHA-256
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Client-Side Verification</div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-2xl font-bold font-mono tabular-nums text-teal-600 dark:text-teal-400">
-              Puter.js
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Cloud Storage & AI</div>
-          </div>
-        </div>
-      </section>
+        {/* Subhead */}
+        <p className="max-w-xl mx-auto text-base sm:text-lg text-slate-600 dark:text-[#8E95A0] leading-relaxed">
+          Tell us about your machine. We'll plan your recovery, verify your checksums, and walk you through the rest.
+        </p>
 
-      {/* Critical Security & Integrity Notice Banner */}
-      <section className="rounded-2xl bg-amber-500/10 border border-amber-500/30 p-4 sm:p-5 flex items-start gap-4 text-amber-900 dark:text-amber-200">
-        <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-        <div className="space-y-1 text-xs">
-          <div className="font-bold text-sm">Flashing Safety & Verification Notice</div>
-          <p className="leading-relaxed text-amber-800 dark:text-amber-300">
-            Flashing custom ROMs, unlocking bootloaders, and modifying partitions carries inherent risks, wipes all personal device data, and may void manufacturer warranties. Always compute and verify the SHA-256 checksum against official published digests before flashing. Devices with Dynamic Partitions must be flashed via <code className="px-1.5 py-0.5 bg-amber-500/20 rounded-md font-mono text-[11px]">fastbootd</code> or verified custom recovery.
-          </p>
-        </div>
-      </section>
-
-      {/* Popular Device Searches */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Smartphone className="w-4 h-4 text-teal-600" />
-            <span>Popular Devices</span>
-          </h2>
+        {/* Underline link */}
+        <div>
           <button
-            onClick={() => onNavigate('devices')}
-            className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 cursor-pointer"
+            onClick={() => onNavigate('downloads')}
+            className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 underline underline-offset-4 cursor-pointer transition-colors"
           >
-            <span>All {deviceCount} Devices</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            Know what you need? See all downloads
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {popularDevices.map((dev) => (
-            <div
-              key={dev.codename}
-              onClick={() => onSelectDeviceForDownload(dev.codename)}
-              className="p-4 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 hover:border-teal-500/60 dark:hover:border-teal-500/60 shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center justify-between group"
-            >
-              <div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">{dev.oem}</div>
-                <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                  {dev.name}
-                </div>
-                <div className="text-xs font-mono text-slate-400 mt-0.5">
-                  codename: <span className="text-teal-700 dark:text-teal-300 font-semibold">{dev.codename}</span>
-                </div>
-              </div>
-              <div className="p-2 rounded-full bg-slate-50 dark:bg-slate-800 group-hover:bg-teal-50 dark:group-hover:bg-teal-900/40 text-slate-400 group-hover:text-teal-600 transition-colors">
-                <ArrowRight className="w-4 h-4" />
-              </div>
+        {/* Two License / Feature Cards (Matching Umbrel's Free for Personal / OEM cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto text-left pt-6">
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-teal-500/15 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-lg">
+              🛡️
             </div>
-          ))}
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Free & Open Source.
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-[#8E95A0] mt-1.5 leading-relaxed">
+                Install LineageOS on your device at no cost, with automated nightly updates included. Built under Apache 2.0 & GPL without surveillance.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg">
+              ⚡
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Treble GSI & Custom Recovery?
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-[#8E95A0] mt-1.5 leading-relaxed">
+                Discover generic system images from AndyYan & ponces, fastbootd command guides, and Harmony Recovery tools.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Core Platform Modules Bento */}
-      <section className="space-y-3">
-        <h2 className="text-base font-bold text-slate-900 dark:text-white">
-          Ecosystem Hubs
+      {/* =========================================================================
+          SECTION 2: "What will LineageOS run on?" (Bento Grid with 3D-styled cards)
+          ========================================================================= */}
+      <section className="space-y-6">
+        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          What will LineageOS run on?
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* ROM Downloads */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
+          {/* Bento Card 1: Google Pixel */}
           <div
-            onClick={() => onNavigate('downloads')}
-            className="p-5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all cursor-pointer space-y-3 shadow-xs group"
+            onClick={() => onSelectDeviceForDownload('akita')}
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
           >
-            <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 flex items-center justify-center text-teal-600 dark:text-teal-400 group-hover:scale-105 transition-transform">
-              <DownloadCloud className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-teal-600 group-hover:scale-105 transition-transform">
+              📱
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">Official ROM Centre</div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                Query official LineageOS nightlies, recovery images, boot.img, and verify SHA-256 digests.
-              </p>
-            </div>
-            <div className="text-xs font-semibold text-teal-600 dark:text-teal-400 flex items-center gap-1 pt-1">
-              <span>Browse builds</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Google Pixel
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                Tensor G3, G2, G1 & Snapdragon
+              </div>
             </div>
           </div>
 
-          {/* Treble GSI */}
+          {/* Bento Card 2: Xiaomi & POCO */}
+          <div
+            onClick={() => onSelectDeviceForDownload('alioth')}
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-sky-600 group-hover:scale-105 transition-transform">
+              ⚡
+            </div>
+            <div>
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Xiaomi & POCO
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                POCO F3, X3 Pro, Redmi Note 10
+              </div>
+            </div>
+          </div>
+
+          {/* Bento Card 3: OnePlus & Nothing */}
+          <div
+            onClick={() => onSelectDeviceForDownload('aston')}
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-rose-600 group-hover:scale-105 transition-transform">
+              🔥
+            </div>
+            <div>
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                OnePlus & Nothing
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                OnePlus 12R, 11, Phone (1) & (2)
+              </div>
+            </div>
+          </div>
+
+          {/* Bento Card 4: Samsung Galaxy */}
+          <div
+            onClick={() => onSelectDeviceForDownload('a52sxq')}
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-indigo-600 group-hover:scale-105 transition-transform">
+              ✨
+            </div>
+            <div>
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Samsung Galaxy
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                A52s 5G, S10, S9, Note 10
+              </div>
+            </div>
+          </div>
+
+          {/* Bento Card 5: Treble GSI */}
           <div
             onClick={() => onNavigate('gsi')}
-            className="p-5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 hover:border-sky-500/50 transition-all cursor-pointer space-y-3 shadow-xs group"
+            className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
           >
-            <div className="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/60 flex items-center justify-center text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform">
-              <Layers className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-[#181B1F] flex items-center justify-center text-xl text-amber-500 group-hover:scale-105 transition-transform">
+              🧩
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">GSI Discovery & Lab</div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                Generic System Images from AndyYan and ponces with interactive device architecture matching.
-              </p>
-            </div>
-            <div className="text-xs font-semibold text-sky-600 dark:text-sky-400 flex items-center gap-1 pt-1">
-              <span>Explore GSIs</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Treble GSI
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                Generic System Image (ARM64/A32)
+              </div>
             </div>
           </div>
 
-          {/* Developer Toolbox */}
+          {/* Bento Card 6: Something else? See all 640+ */}
           <div
-            onClick={() => onNavigate('toolbox')}
-            className="p-5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 transition-all cursor-pointer space-y-3 shadow-xs group"
+            onClick={() => onNavigate('devices')}
+            className="p-5 sm:p-6 rounded-3xl bg-slate-50 dark:bg-[#14171A] border border-slate-200 dark:border-white/10 hover:border-teal-500/50 transition-all cursor-pointer flex flex-col justify-between h-48 sm:h-52 group shadow-xs"
           >
-            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform">
-              <Wrench className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-200 dark:bg-[#202428] flex items-center justify-center text-xl text-teal-600 group-hover:scale-105 transition-transform">
+              🔍
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">Android Dev Toolbox</div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                Client-side SHA-256 calculation, build.prop parsing, Android API level charts, and payload inspectors.
-              </p>
+              <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                Something else?
+              </div>
+              <div className="text-xs text-slate-500 dark:text-[#8E95A0] mt-0.5">
+                Browse all {deviceCount}+ devices
+              </div>
             </div>
-            <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1 pt-1">
-              <span>Open toolbox</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </div>
+
+        {/* Featured Hardware Hero Card (Like "Designed for umbrelOS") */}
+        <div className="p-8 sm:p-10 rounded-3xl bg-linear-to-b from-[#14171A] to-[#0A0B0C] border border-white/10 text-white space-y-6">
+          <div className="max-w-xl space-y-3">
+            <span className="text-xs font-mono font-bold tracking-wider uppercase text-teal-400">
+              Verified & Tested
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Designed for open hardware freedom.
+            </h3>
+            <p className="text-xs sm:text-sm text-[#8E95A0] leading-relaxed">
+              Official LineageOS builds ship with verified Lineage Recovery, fastbootd compatibility, automated nightly OTA updates, and SHA-256 cryptographic hashes.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3 pt-2">
+            <button
+              onClick={() => onNavigate('devices')}
+              className="umbrel-btn-white"
+            >
+              Explore Verified Devices
+            </button>
+            <button
+              onClick={() => onNavigate('compatibility')}
+              className="umbrel-btn-pill"
+            >
+              GSI Compatibility Lab
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 3: DOWNLOADS (Exact Umbrel downloads card styling & layout)
+          ========================================================================= */}
+      <section className="space-y-6">
+        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Downloads
+        </h2>
+
+        <div className="space-y-4">
+          {/* Target 1: Google Pixel 8a */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
+                  📱
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Google Pixel 8a <span className="font-mono text-xs font-semibold text-teal-600 dark:text-teal-400">akita</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
+                    Official LineageOS nightly build for Tensor G3. Full recovery, boot.img, vendor_boot, and OTA payload verification.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-400 font-mono">
+              ROM package · 1.4 GB · Android 14 (API 34) · Nightly
+            </div>
+
+            {/* Umbrel style action buttons */}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                onClick={() => onSelectDeviceForDownload('akita')}
+                className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>LineageOS 21.0 Nightly</span>
+              </button>
+
+              <button
+                onClick={() => onSelectDeviceForDownload('akita')}
+                className="umbrel-btn-pill"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>Recovery Image</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('guides')}
+                className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
+              >
+                <span>Install guide</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Target 2: POCO F3 / Redmi K40 */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
+                  ⚡
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    POCO F3 / Redmi K40 <span className="font-mono text-xs font-semibold text-teal-600 dark:text-teal-400">alioth</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
+                    High performance Snapdragon 870 build with 120Hz display refresh calibration, dynamic super partitions, and dual stereo audio.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-400 font-mono">
+              ROM package · 1.3 GB · Android 14 (API 34) · Nightly
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                onClick={() => onSelectDeviceForDownload('alioth')}
+                className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>LineageOS 21.0 Nightly</span>
+              </button>
+
+              <button
+                onClick={() => onSelectDeviceForDownload('alioth')}
+                className="umbrel-btn-pill"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>Recovery Image</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('guides')}
+                className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
+              >
+                <span>Install guide</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Target 3: Community Treble GSI */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] border border-slate-200 dark:border-white/10 flex items-center justify-center text-2xl shrink-0">
+                  🧩
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Community Treble GSI <span className="font-mono text-xs font-semibold text-sky-500">ARM64 & ARM32</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-[#8E95A0] mt-1 max-w-lg leading-relaxed">
+                    By AndyYan and ponces. Generic System Images for any Project Treble compatible phone. Flash with fastbootd.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-400 font-mono">
+              Raw system image (.img.xz) · 980 MB · Android 14
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                onClick={() => onNavigate('gsi')}
+                className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>GSI arm64_bgN (GApps)</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('gsi')}
+                className="umbrel-btn-pill"
+              >
+                <DownloadCloud className="w-4 h-4" />
+                <span>GSI arm64_bvN (Vanilla)</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('compatibility')}
+                className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
+              >
+                <span>Compatibility check</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Real Builds Preview for Demonstration */}
-      {recentBuilds.length > 0 && (
-        <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-teal-600" />
-              <span>Latest Verified Official Builds (Google Pixel 8a)</span>
-            </h2>
-            <button
-              onClick={() => onSelectDeviceForDownload('akita')}
-              className="text-xs font-semibold text-teal-600 dark:text-teal-400 hover:underline cursor-pointer"
-            >
-              View Full History
-            </button>
+      {/* =========================================================================
+          SECTION 4: STORYTELLING & EDITORIAL (Matching Screenshot 2 "Your cloud, in your home")
+          ========================================================================= */}
+      <section className="text-center space-y-12 pt-8">
+        <div className="space-y-4">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+            Your phone,<br />
+            in your <em className="italic font-serif font-normal text-teal-600 dark:text-teal-400">control</em>.
+          </h2>
+          <p className="max-w-lg mx-auto text-base sm:text-lg text-slate-600 dark:text-[#8E95A0]">
+            You've been renting your digital life from ad companies. Time to <span className="font-bold underline decoration-teal-500 decoration-2">own it</span>.
+          </p>
+        </div>
+
+        {/* 3 Pillars Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          {/* Pillar 1 */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
+            <div className="text-3xl">🔒</div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              Zero Telemetry
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
+              Every photo, file, and message stays on hardware you own. No background diagnostic trackers reporting your habits to corporate servers.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {recentBuilds.map((build, i) => {
-              const zipFile = build.files.find((f: any) => f.filename.endsWith('.zip')) || build.files[0];
-              const sizeMb = zipFile?.size ? (zipFile.size / (1024 * 1024)).toFixed(0) : 'N/A';
-              return (
-                <div
-                  key={i}
-                  className="p-4 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 space-y-2 text-xs"
-                >
-                  <div className="flex items-center justify-between text-slate-500">
-                    <span className="font-semibold text-slate-900 dark:text-white">
-                      Build {build.date}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 font-mono text-[10px]">
-                      {build.type || 'nightly'}
-                    </span>
-                  </div>
-                  <div className="font-mono text-[11px] text-slate-600 dark:text-slate-300 truncate" title={zipFile?.filename}>
-                    {zipFile?.filename}
-                  </div>
-                  <div className="text-slate-500 flex items-center justify-between text-[11px]">
-                    <span>Size: {sizeMb} MB</span>
-                    <span>SDK {zipFile?.os_sdk_level || 34}</span>
-                  </div>
-                  {zipFile?.url && (
-                    <a
-                      href={zipFile.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 block w-full text-center py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-semibold transition-colors"
-                    >
-                      Download Package
-                    </a>
-                  )}
-                </div>
-              );
-            })}
+          {/* Pillar 2 */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
+            <div className="text-3xl">🌱</div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              Device Longevity
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
+              Don't throw away a perfectly good phone because the OEM ended security updates. LineageOS keeps hardware running smoothly for 7+ years.
+            </p>
           </div>
-        </section>
-      )}
+
+          {/* Pillar 3 */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-3">
+            <div className="text-3xl">🛠️</div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+              Root & Freedom
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-[#8E95A0] leading-relaxed">
+              Install Magisk root, microG open services, or pure AOSP vanilla. You decide what apps, permissions, and background processes run on your CPU.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Access to Developer Toolbox */}
+      <section className="p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
+        <div className="space-y-1">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            Need to calculate SHA-256 or inspect build.prop?
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-[#8E95A0]">
+            Use our 10 browser-based developer utilities. Calculates hashes locally with zero uploads.
+          </p>
+        </div>
+
+        <button
+          onClick={() => onNavigate('toolbox')}
+          className="umbrel-btn-white shrink-0"
+        >
+          <span>Open Developer Toolbox</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </section>
     </div>
   );
 };

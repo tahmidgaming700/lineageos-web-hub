@@ -85,13 +85,13 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by device name, codename (e.g. akita, alioth), or processor..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-300 dark:border-slate-800 text-xs sm:text-sm focus:outline-hidden focus:border-teal-500 text-slate-900 dark:text-slate-100"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-100 dark:bg-[#17191D] border border-slate-200 dark:border-white/10 text-xs sm:text-sm focus:outline-hidden focus:border-teal-500 text-slate-900 dark:text-white"
             />
           </div>
 
@@ -99,7 +99,7 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
             <select
               value={selectedArch}
               onChange={(e) => setSelectedArch(e.target.value)}
-              className="px-3 py-2.5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-300 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 focus:outline-hidden"
+              className="px-4 py-3 rounded-2xl bg-slate-100 dark:bg-[#17191D] border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 focus:outline-hidden"
             >
               <option value="all">All Architectures</option>
               <option value="arm64">ARM64 (64-bit)</option>
@@ -117,8 +117,8 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
               onClick={() => setSelectedOem(oem)}
               className={`px-3 py-1.5 rounded-full capitalize whitespace-nowrap transition-colors cursor-pointer ${
                 selectedOem.toLowerCase() === oem.toLowerCase()
-                  ? 'bg-teal-600 text-white font-semibold'
-                  : 'bg-white dark:bg-[#1B2122] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-black dark:bg-white text-white dark:text-black font-bold shadow-xs'
+                  : 'bg-slate-100 dark:bg-[#17191D] text-slate-600 dark:text-[#8E95A0] hover:text-white border border-slate-200 dark:border-white/5'
               }`}
             >
               {oem === 'all' ? 'All OEMs' : oem}
@@ -165,22 +165,22 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
             return (
               <div
                 key={device.model}
-                className="p-5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 hover:border-teal-500/50 transition-all shadow-xs flex flex-col justify-between space-y-4 group"
+                className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/25 transition-all shadow-xs flex flex-col justify-between space-y-4 group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      <div className="text-xs font-semibold text-slate-500 dark:text-[#8E95A0]">
                         {device.oem}
                       </div>
-                      <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-0.5">
+                      <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-0.5 tracking-tight">
                         {device.name}
                       </h3>
                     </div>
 
                     <button
                       onClick={() => onToggleSaveDevice(device.model)}
-                      className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-400 hover:text-teal-600 cursor-pointer"
+                      className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-[#1A1D21] transition-colors text-slate-400 hover:text-teal-500 cursor-pointer"
                       title={isSaved ? 'Remove from saved' : 'Save device'}
                     >
                       {isSaved ? (
@@ -191,18 +191,18 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
                     </button>
                   </div>
 
-                  <div className="mt-2.5 flex items-center gap-2 text-xs">
-                    <span className="font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300">
+                  <div className="mt-3 flex items-center gap-2 text-xs">
+                    <span className="font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-[#17191D] font-bold text-slate-800 dark:text-slate-200">
                       {device.model}
                     </span>
                     <span className="text-slate-400">·</span>
-                    <span className="font-mono text-slate-500">
+                    <span className="font-mono text-slate-500 text-xs">
                       {device.architecture ? device.architecture.toUpperCase() : 'ARM64'}
                     </span>
                     {device.lineage_recovery && (
                       <>
                         <span className="text-slate-400">·</span>
-                        <span className="text-teal-700 dark:text-teal-400 text-[11px]">
+                        <span className="text-teal-600 dark:text-teal-400 text-[11px] font-medium">
                           Recovery verified
                         </span>
                       </>
@@ -211,7 +211,7 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
 
                   {/* Hardware specs preview */}
                   {(device.cpu || device.ram || device.screen) && (
-                    <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 space-y-1 border-t border-slate-100 dark:border-slate-800/60 pt-2.5">
+                    <div className="mt-4 text-xs text-slate-500 dark:text-[#8E95A0] space-y-1.5 border-t border-slate-100 dark:border-white/5 pt-3">
                       {device.cpu && (
                         <div>
                           <span className="text-slate-400">SoC:</span> {device.cpu}
@@ -232,10 +232,10 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
                 </div>
 
                 {/* Card Actions */}
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between gap-2">
                   <button
                     onClick={() => onSelectDeviceForDownload(device.model)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs font-bold transition-opacity hover:opacity-90 cursor-pointer shadow-xs"
                   >
                     <DownloadCloud className="w-3.5 h-3.5" />
                     <span>Get Builds</span>
@@ -243,7 +243,7 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
 
                   <button
                     onClick={() => onSelectDeviceForCompatibility(device)}
-                    className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    className="p-2.5 rounded-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1A1D21] transition-colors cursor-pointer"
                     title="Check GSI compatibility for this device"
                   >
                     <Cpu className="w-4 h-4 text-sky-600 dark:text-sky-400" />
@@ -254,7 +254,7 @@ export const DeviceExplorer: React.FC<DeviceExplorerProps> = ({
                       href={device.wiki_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                      className="p-2.5 rounded-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1A1D21] transition-colors"
                       title="View Official LineageOS Wiki documentation"
                     >
                       <ExternalLink className="w-4 h-4" />

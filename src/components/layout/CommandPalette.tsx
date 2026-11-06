@@ -83,11 +83,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl bg-white dark:bg-[#1B2122] rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden text-slate-900 dark:text-slate-100 flex flex-col max-h-[80vh]"
+        className="w-full max-w-xl bg-white dark:bg-[#0F1113] rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden text-slate-900 dark:text-white flex flex-col max-h-[80vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 dark:border-white/10">
           <Search className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
           <input
             ref={inputRef}
@@ -96,7 +96,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search devices, codenames (e.g. akita, alioth), tools, guides..."
-            className="w-full bg-transparent text-sm focus:outline-hidden placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            className="w-full bg-transparent text-sm focus:outline-hidden placeholder:text-slate-400 dark:placeholder:text-[#8E95A0]"
           />
           {query && (
             <button
@@ -111,24 +111,24 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         {/* Results Container */}
         <div className="overflow-y-auto flex-1 p-2">
           {loading && (
-            <div className="py-8 text-center text-xs text-slate-500">Searching ecosystem...</div>
+            <div className="py-8 text-center text-xs text-slate-500 dark:text-[#8E95A0]">Searching ecosystem...</div>
           )}
 
           {!loading && query && results.length === 0 && (
-            <div className="py-8 text-center text-xs text-slate-500">
+            <div className="py-8 text-center text-xs text-slate-500 dark:text-[#8E95A0]">
               No matching records found for "{query}". Try searching by codename (e.g. "shiba", "aston") or tool name.
             </div>
           )}
 
           {!loading && !query && (
-            <div className="p-4 text-xs text-slate-500 dark:text-slate-400">
+            <div className="p-4 text-xs text-slate-500 dark:text-[#8E95A0]">
               <div className="font-semibold text-slate-700 dark:text-slate-300 mb-2">Popular Searches</div>
               <div className="flex flex-wrap gap-1.5">
                 {['akita', 'alioth', 'aston', 'bramble', 'SHA-256', 'build.prop', 'GSI Flash'].map((chip) => (
                   <button
                     key={chip}
                     onClick={() => setQuery(chip)}
-                    className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-900/40 text-[11px] cursor-pointer"
+                    className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#17191D] text-slate-700 dark:text-[#8E95A0] hover:text-white border border-slate-200 dark:border-white/5 text-[11px] cursor-pointer"
                   >
                     {chip}
                   </button>

@@ -9,11 +9,10 @@ import {
   Archive,
   AlertCircle,
   FileCode,
-  HardDrive,
   Calendar,
-  Layers,
   Bookmark,
   BookmarkCheck,
+  ArrowRight,
 } from 'lucide-react';
 import { LineageBuild, LineageDevice } from '../../types';
 import { fetchBuilds, fetchDevices } from '../../lib/api';
@@ -97,27 +96,26 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
   );
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <div className="space-y-8 max-w-5xl mx-auto pb-20 text-slate-900 dark:text-white transition-colors">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-          <DownloadCloud className="w-6 h-6 text-teal-600" />
-          <span>ROM Download Centre</span>
+      <div className="space-y-2">
+        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+          Downloads
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-          Direct upstream access to official LineageOS nightlies, SHA-256 checksums, and recovery images.
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-[#8E95A0]">
+          Direct upstream official builds from <code className="font-mono text-teal-600 dark:text-teal-400">download.lineageos.org</code> with SHA-256 integrity digests.
         </p>
       </div>
 
-      {/* Device Picker Bar */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
-        <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-          Target Device Selection
+      {/* Target Device Selector Bar (Umbrel dark card style) */}
+      <div className="p-6 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-4">
+        <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#8E95A0]">
+          Target Device Hardware
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={searchInput}
@@ -127,27 +125,27 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
                   handleSelectDevice(searchInput.trim());
                 }
               }}
-              placeholder="Enter device codename (e.g. akita, alioth, aston, shiba)..."
-              className="w-full pl-10 pr-24 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm focus:outline-hidden focus:border-teal-500 text-slate-900 dark:text-slate-100"
+              placeholder="Enter device codename (e.g. akita, alioth, aston, bramble)..."
+              className="w-full pl-11 pr-24 py-3 rounded-2xl bg-slate-100 dark:bg-[#17191D] border border-slate-200 dark:border-white/10 text-xs sm:text-sm focus:outline-hidden focus:border-teal-500 text-slate-900 dark:text-white"
             />
             <button
               onClick={() => searchInput.trim() && handleSelectDevice(searchInput.trim())}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-bold transition-opacity hover:opacity-90 cursor-pointer"
             >
-              Query
+              Select
             </button>
           </div>
 
-          {/* Quick select popular codenames */}
+          {/* Quick select pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto text-xs py-1">
             {['akita', 'alioth', 'aston', 'bramble', 'sweet', 'shiba'].map((code) => (
               <button
                 key={code}
                 onClick={() => handleSelectDevice(code)}
-                className={`px-2.5 py-1.5 rounded-lg font-mono text-[11px] whitespace-nowrap transition-colors cursor-pointer ${
+                className={`px-3 py-2 rounded-full font-mono text-[11px] whitespace-nowrap transition-all cursor-pointer ${
                   deviceCodename.toLowerCase() === code
-                    ? 'bg-teal-600 text-white font-bold'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    ? 'bg-black dark:bg-white text-white dark:text-black font-bold shadow-xs'
+                    : 'bg-slate-100 dark:bg-[#17191D] text-slate-600 dark:text-[#8E95A0] hover:text-white border border-slate-200 dark:border-white/5'
                 }`}
               >
                 {code}
@@ -156,17 +154,23 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
           </div>
         </div>
 
-        {/* Current Device Profile Bar */}
+        {/* Current Device Details Strip */}
         {currentDevice && (
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-900 dark:text-white">
+              <span className="font-extrabold text-slate-900 dark:text-white text-sm">
                 {currentDevice.name}
               </span>
               <span className="text-slate-400">·</span>
               <span className="text-slate-500">{currentDevice.oem}</span>
               <span className="text-slate-400">·</span>
-              <span className="font-mono text-teal-700 dark:text-teal-300">{currentDevice.model}</span>
+              <span className="font-mono text-teal-600 dark:text-teal-400 font-bold">{currentDevice.model}</span>
+              {currentDevice.cpu && (
+                <>
+                  <span className="text-slate-400">·</span>
+                  <span className="text-slate-500">{currentDevice.cpu}</span>
+                </>
+              )}
             </div>
 
             {currentDevice.wiki_url && (
@@ -176,7 +180,7 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-teal-600 dark:text-teal-400 font-semibold hover:underline"
               >
-                <span>Device Installation Wiki</span>
+                <span>Device Wiki & Specs</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
@@ -184,30 +188,30 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
         )}
       </div>
 
-      {/* Loading State */}
+      {/* Loading state */}
       {loading && (
-        <div className="p-12 text-center text-xs text-slate-500 space-y-2">
-          <div className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto" />
-          <div>Contacting download.lineageos.org API for {deviceCodename}...</div>
+        <div className="p-16 text-center text-xs text-slate-500 dark:text-[#8E95A0] space-y-3">
+          <div className="w-7 h-7 border-2 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <div>Contacting official LineageOS build cluster for {deviceCodename}...</div>
         </div>
       )}
 
-      {/* Error / Missing Official Builds */}
+      {/* Missing official nightlies message */}
       {!loading && (error || builds.length === 0) && (
-        <div className="p-8 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 text-center space-y-4">
-          <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
+        <div className="p-10 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 text-center space-y-4 shadow-xs">
+          <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
           <div className="space-y-1">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              No Current Official LineageOS Nightlies Found for "{deviceCodename}"
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              No Current Official Nightlies for "{deviceCodename}"
             </h3>
-            <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-              LineageOS only maintains current nightlies for active build targets. Older or legacy devices are archived.
+            <p className="text-xs text-slate-500 dark:text-[#8E95A0] max-w-md mx-auto leading-relaxed">
+              LineageOS only builds current nightlies for active branches. Discontinued devices are preserved in the TimSchumi Historical Archive.
             </p>
           </div>
           <div className="pt-2 flex justify-center gap-3">
             <button
               onClick={() => onNavigateToArchive(deviceCodename)}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+              className="umbrel-btn-white"
             >
               <Archive className="w-4 h-4" />
               <span>Search Historical Archive for {deviceCodename}</span>
@@ -216,11 +220,11 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
         </div>
       )}
 
-      {/* Builds List */}
+      {/* Builds List in Umbrel Card Format */}
       {!loading && builds.length > 0 && (
         <div className="space-y-4">
-          <div className="text-xs font-semibold text-slate-500">
-            Available Builds ({builds.length})
+          <div className="text-xs font-bold text-slate-500 dark:text-[#8E95A0] uppercase tracking-wider">
+            Available Nightly Releases ({builds.length})
           </div>
 
           {builds.map((build, index) => {
@@ -235,158 +239,115 @@ export const RomDownloadCenter: React.FC<RomDownloadCenterProps> = ({
             return (
               <div
                 key={build.datetime || index}
-                className="p-5 rounded-2xl bg-white dark:bg-[#1B2122] border border-slate-200 dark:border-slate-800 shadow-xs space-y-4"
+                className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0F1113] border border-slate-200 dark:border-white/10 shadow-xs space-y-5"
               >
-                {/* Build Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-2.5">
-                    <Calendar className="w-4 h-4 text-teal-600 shrink-0" />
+                {/* Header row */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-[#1A1D21] flex items-center justify-center text-lg shrink-0">
+                      📱
+                    </div>
                     <div>
-                      <span className="text-sm font-bold text-slate-900 dark:text-white">
-                        Build Date: {build.date}
-                      </span>
-                      <span className="text-slate-400 text-xs ml-2">
-                        ({build.type || 'nightly'})
-                      </span>
+                      <div className="text-base font-bold text-slate-900 dark:text-white">
+                        LineageOS {build.version || '21.0'} Nightly · {build.date}
+                      </div>
+                      <div className="text-xs text-slate-500 dark:text-[#8E95A0] font-mono mt-0.5">
+                        {deviceCodename} · SDK {romZip.os_sdk_level || 34} · Patch {romZip.os_patch_level || 'Latest'}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {romZip.os_patch_level && (
-                      <span className="text-xs text-slate-500">
-                        Patch: {romZip.os_patch_level}
-                      </span>
+                  <button
+                    onClick={() =>
+                      onToggleBookmarkBuild({
+                        codename: deviceCodename,
+                        filename: romZip.filename,
+                        version: build.version || 'Nightly',
+                        date: build.date,
+                        url: romZip.url,
+                      })
+                    }
+                    className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-400 hover:text-teal-500 cursor-pointer"
+                    title={isBookmarked ? 'Remove bookmark' : 'Bookmark build'}
+                  >
+                    {isBookmarked ? (
+                      <BookmarkCheck className="w-5 h-5 text-teal-600 fill-teal-600/20" />
+                    ) : (
+                      <Bookmark className="w-5 h-5" />
                     )}
-                    <button
-                      onClick={() =>
-                        onToggleBookmarkBuild({
-                          codename: deviceCodename,
-                          filename: romZip.filename,
-                          version: build.version || 'Nightly',
-                          date: build.date,
-                          url: romZip.url,
-                        })
-                      }
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-teal-600 transition-colors cursor-pointer"
-                      title={isBookmarked ? 'Remove bookmark' : 'Bookmark build'}
-                    >
-                      {isBookmarked ? (
-                        <BookmarkCheck className="w-4 h-4 text-teal-600 fill-teal-600/20" />
-                      ) : (
-                        <Bookmark className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
+                  </button>
                 </div>
 
-                {/* Primary ROM ZIP Card */}
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/70 dark:border-slate-700/60 space-y-3">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="text-xs font-semibold text-teal-700 dark:text-teal-300 flex items-center gap-1.5">
-                        <FileCode className="w-3.5 h-3.5" />
-                        <span>ROM Installation ZIP</span>
-                      </div>
-                      <div className="font-mono text-xs font-bold text-slate-900 dark:text-white truncate mt-1">
-                        {romZip.filename}
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        Size: {romSizeFormatted} · SDK Level: {romZip.os_sdk_level || 34}
-                      </div>
-                    </div>
+                {/* Primary ROM Image metadata & Pill Buttons */}
+                <div className="space-y-3">
+                  <div className="text-xs text-slate-400 font-mono">
+                    ROM ZIP · {romSizeFormatted} · Signed Official Package
+                  </div>
 
-                    {/* Download Button */}
+                  <div className="flex flex-wrap items-center gap-3">
                     {romZip.url && (
                       <a
                         href={romZip.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-colors whitespace-nowrap shadow-xs"
+                        className="umbrel-btn-pill bg-black dark:bg-[#1A1D21] text-white"
                       >
                         <DownloadCloud className="w-4 h-4" />
-                        <span>Download ROM</span>
+                        <span>Download LineageOS 21.0</span>
                       </a>
                     )}
+
+                    {/* Quick Companion Flash Images */}
+                    {companionFiles.slice(0, 2).map((comp) => (
+                      <a
+                        key={comp.filename}
+                        href={comp.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="umbrel-btn-pill"
+                      >
+                        <DownloadCloud className="w-4 h-4" />
+                        <span>{comp.filename}</span>
+                      </a>
+                    ))}
+
+                    <button
+                      onClick={() => onNavigateToVerifier(romZip.sha256 || '', romZip.filename)}
+                      className="text-xs font-semibold text-slate-600 dark:text-[#8E95A0] hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center gap-1 ml-auto cursor-pointer"
+                    >
+                      <span>Verify Checksum</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-
-                  {/* SHA-256 Digest Bar */}
-                  {romZip.sha256 && (
-                    <div className="p-2.5 rounded-lg bg-white dark:bg-[#171D1E] border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span className="text-[11px] font-semibold text-slate-500 shrink-0">SHA-256:</span>
-                        <code className="font-mono text-[11px] text-slate-800 dark:text-slate-200 truncate select-all">
-                          {romZip.sha256}
-                        </code>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <button
-                          onClick={() => handleCopy(romZip.sha256!)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-                        >
-                          {copiedHash === romZip.sha256 ? (
-                            <>
-                              <Check className="w-3 h-3 text-emerald-600" />
-                              <span>Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-3 h-3" />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
-
-                        <button
-                          onClick={() => onNavigateToVerifier(romZip.sha256!, romZip.filename)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100 text-teal-800 dark:text-teal-200 transition-colors cursor-pointer"
-                          title="Open in Developer Toolbox file verifier"
-                        >
-                          <span>Verify with File</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                {/* Companion Images (Recovery, boot.img, vendor_boot.img) */}
-                {companionFiles.length > 0 && (
-                  <div className="space-y-2 pt-2">
-                    <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                      Companion Flash Images ({companionFiles.length})
+                {/* SHA-256 Digest Bar */}
+                {romZip.sha256 && (
+                  <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#14171A] border border-slate-200 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <span className="font-mono text-[10px] text-slate-500 uppercase font-bold shrink-0">SHA-256:</span>
+                      <code className="font-mono text-[11px] text-slate-800 dark:text-slate-200 truncate select-all">
+                        {romZip.sha256}
+                      </code>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                      {companionFiles.map((comp) => {
-                        const compSize = comp.size
-                          ? (comp.size / (1024 * 1024)).toFixed(1) + ' MB'
-                          : '';
-                        return (
-                          <div
-                            key={comp.filename}
-                            className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#171D1E] flex items-center justify-between text-xs"
-                          >
-                            <div className="min-w-0 pr-2">
-                              <div className="font-mono text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate">
-                                {comp.filename}
-                              </div>
-                              <div className="text-[10px] text-slate-400">{compSize}</div>
-                            </div>
-                            {comp.url && (
-                              <a
-                                href={comp.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-teal-600 hover:text-white transition-colors text-slate-600 dark:text-slate-300 shrink-0"
-                                title={`Download ${comp.filename}`}
-                              >
-                                <DownloadCloud className="w-3.5 h-3.5" />
-                              </a>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+
+                    <button
+                      onClick={() => handleCopy(romZip.sha256!)}
+                      className="px-3 py-1 rounded-full text-[11px] font-semibold bg-white dark:bg-[#1E2226] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-white transition-colors cursor-pointer shrink-0 inline-flex items-center gap-1"
+                    >
+                      {copiedHash === romZip.sha256 ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-500" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy Hash</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 )}
               </div>
